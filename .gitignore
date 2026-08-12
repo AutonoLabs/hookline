@@ -1,0 +1,65 @@
+# Node
+node_modules/
+.npm/
+.pnpm-store/
+*.log
+yarn.lock
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.env
+.env.local
+.env.*.local
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*.iml
+*~
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+.next/
+out/
+target/
+
+# Test
+coverage/
+.nyc_output/
+
+# Local data
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets (NEVER commit)
+**/secrets/
+**/credentials/
+**/*.pem
+**/*.key
+**/*.crt
+
+# Docker
+.docker/
+
+# Logs
+logs/
+*.log
