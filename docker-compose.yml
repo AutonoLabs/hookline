@@ -1,0 +1,74 @@
+# Hookline — local development stack
+#
+# Spins up Postgres + Redis + the backend in dev mode.
+# Run: docker compose up
+#
+# For production, see docs/deployment/cloudflare.md
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hookline-postgres
+    environment:
+      POSTGRES_USER: hookline
+      POSTGRES_PASSWORD: hookline_dev
+      POSTGRES_DB: hookline
+    ports:
+      - "5432:5432"
+    volumes:
+      - hookline-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hookline"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hookline-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - hookline-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hookline-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://hookline:hookline_dev@postgres:5432/hookline
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: dev
+      SECRET_KEY: dev-secret-change-in-production
+      LOG_LEVEL: debug
+      # OAuth placeholders — replace before running OAuth flow
+      GHL_CLIENT_ID: dev-placeholder
+      GHL_CLIENT_SECRET: dev-placeholder
+      GHL_REDIRECT_URI: http://localhost:8000/oauth/ghl/callback
+      DYNAMICS_CLIENT_ID: dev-placeholder
+      DYNAMICS_CLIENT_SECRET: dev-placeholder
+      DYNAMICS_TENANT_ID: dev-placeholder
+      DYNAMICS_REDIRECT_URI: http://localhost:8000/oauth/dynamics/callback
+      ENCRYPTION_KEY: dev-encryption-key-32-bytes-long-xx
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - ./backend/app:/app/app  # hot-reload during dev
+
+volumes:
+  hookline-postgres-data:
+  hookline-redis-data:
