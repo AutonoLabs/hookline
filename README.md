@@ -1,33 +1,38 @@
 # Hookline
 
-**Voice companion platform — scaffold (in progress)**
+**Voice companion platform — AutonoLabs project (managed by Autonio)**
 
-A derivative product scaffold, building on selected elements from the Yapper Care ecosystem. Not a Yapper rebrand — a separate product with its own positioning, brand, and stack choices.
+A derivative product scaffold, building on selected architectural patterns from voice-AI projects. Not a Yapper rebrand — a separate product with its own positioning, brand, and stack choices. **No Yapper trademarks, brand assets, or trademark strings used.**
 
-**Status:** Scaffold only. No production code yet. See `ARCHITECTURE.md` for the design intent and `docs/prerequisites.md` for the dependency graph.
+**Status:** Scaffold + Cloudflare config in place. See `ARCHITECTURE.md` for the design intent and `docs/prerequisites.md` for the dependency graph.
 
 ## What this repo will be
 
 A programmatic API + simple dashboard for deploying voice AI companions. Positioned for **non-clinical** use cases (general wellness, social connection, daily check-ins).
 
-**Hard rules (carried over from Yapper Care):**
+**Hard rules:**
 - NO clinical efficacy claims
 - NO treatment / cognition / brain-health positioning
+- NO Yapper trademarks, brand assets, or trademark strings
 - NO references to specific Yapper customers, caregivers, or facilities
-- NO Yapper trademark strings
+- Non-clinical positioning only (general wellness, social connection, daily check-ins)
 
 ## Layout
 
 ```
 hookline/
-├── README.md           (this file)
-├── ARCHITECTURE.md     (design intent)
-├── LICENSE             (BSD-3-Clause)
+├── README.md             (this file)
+├── ARCHITECTURE.md       (design intent)
+├── LICENSE               (BSD-3-Clause)
 ├── .gitignore
-├── src/                (placeholder Python + TypeScript)
+├── src/                  (placeholder Python + TypeScript)
+├── cloudflare/           (Worker + Pages config)
+│   ├── wrangler.toml
+│   └── worker/
 ├── docs/
 │   ├── prerequisites.md
-│   └── architecture-decisions.md
+│   └── deployment/
+│       └── cloudflare.md
 └── .github/
     └── workflows/
         └── ci.yml
@@ -35,25 +40,20 @@ hookline/
 
 ## Next steps
 
-See `docs/prerequisites.md`.
+See `docs/prerequisites.md` and `docs/deployment/cloudflare.md`.
 
 ## Vault
 
-- `autonobrain/70 - System/hookline-prerequisites-2026-08-13.md` (prerequisites + blockers)
-- `autonobrain/70 - System/hookline-credentials-2026-08-13.md` (credentials matrix — NO secrets)
-- `autonobrain/70 - System/hookline-repo-inspection-2026-08-13.md` (Yapper repos inspection)
+All Hookline docs live in **autonobrain** (AutonoLabs vault):
+- `autonobrain/30 - Resources/Hookline/hookline-prerequisites-2026-08-13.md`
+- `autonobrain/30 - Resources/Hookline/hookline-credentials-2026-08-13.md`
+- `autonobrain/30 - Resources/Hookline/hookline-repo-inspection-2026-08-13.md`
 
-## Source repos inspected
+## Architectural reference (inspiration only — not copied)
 
-- https://github.com/AutonoLabs/yapper-care (Chung's mainline)
-- https://github.com/AutonoLabs/yapper-brand (brand + marketing)
-- https://github.com/AutonoLabs/yapper-website (public marketing site)
-- https://github.com/AutonoLabs/yapper-care-backend (post-processing API)
-- https://github.com/AutonoLabs/yapper-care-spa (React SPA)
-- https://github.com/AutonoLabs/yapper-app (go.yapper.care companion app)
-
-Inspected clones live at `/Users/elibernstein/Code/hookline-source/`.
+For architectural patterns, see the Yapper Care monorepo at https://github.com/AutonoLabs/yapper-care (and related repos). These are referenced for voice pipeline + dashboard patterns. **No code, brand, or trademark strings are copied.**
 
 ## Maintainer
 
 Eli Bernstein (`capitelist@elibernstein`)
+AutonoLabs project managed by Autonio (Herschel's developer agent).

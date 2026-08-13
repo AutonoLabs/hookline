@@ -1,0 +1,50 @@
+# Hookline — Cloudflare Worker + Pages config
+#
+# Deploys:
+#   1. Worker that proxies /api/* to backend (Railway/Render)
+#   2. Pages project for static landing page
+#
+# Routes:
+#   hookline.autonolabs.ai/         → Pages (landing page)
+#   hookline.autonolabs.ai/api/*    → Worker → backend
+#   hookline.autonolabs.ai/dashboard → Pages (dashboard SPA)
+
+name = "hookline"
+compatibility_date = "2025-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Vars (set via `wrangler secret put` for secrets, plain for non-secret)
+[vars]
+BACKEND_URL = "https://hookline-backend.railway.app"
+ENVIRONMENT = "production"
+
+# KV namespace for sessions + cache (provision via wrangler kv:namespace create)
+# [[kv_namespaces]]
+# binding = "SESSIONS"
+# id = "..."
+
+# Durable Objects for voice sessions (when implemented in v0.2)
+# [[durable_objects.bindings]]
+# name = "VOICE_SESSIONS"
+# class_name = "VoiceSession"
+
+# Routes — hookline.autonolabs.ai/api/* → Worker
+# Replace `zone_id` with actual CF zone ID for autonolabs.ai
+# Get it via: wrangler routes list --zone-name autonolabs.ai
+# [[routes]]
+# pattern = "hookline.autonolabs.ai/api/*"
+# zone_id = "REPLACE_WITH_AUTONOLABS_AI_ZONE_ID"
+
+# Pages project — built from frontend/landing.html
+# Run: wrangler pages deploy frontend/landing.html --project-name=hookline-landing
+# This deploys the landing page to hookline-landing.pages.dev
+# Then add a custom domain: hookline.autonolabs.ai → Pages project
+
+[build]
+command = "npm run build"
+cwd = "worker"
+[build.upload]
+format = "service-worker"
+
+[observability]
+enabled = true
