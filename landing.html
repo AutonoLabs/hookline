@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cadence — Programmable voice companions for your CRM. GHL and Dynamics 365 native, developer-first, simple API." />
+  <meta name="theme-color" content="#0B5FD9" />
+  <title>Cadence — A voice that comes back.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B5FD9'/%3E%3Ccircle cx='16' cy='11' r='3' fill='white'/%3E%3C/svg%3E" />
+
+  <!-- Tailwind CDN — v0 dev only. Production will inline the generated CSS.
+       Tailwind's CDN does not publish SRI hashes, so we accept this for the
+       prototype. Real production builds should use Tailwind CLI to compile
+       + inline styles. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F0F6FF',
+              100: '#DCEBFE',
+              500: '#0B5FD9',
+              600: '#0950B8',
+              700: '#073D8E',
+            },
+            mint: '#9AE5C0',
+            slate: {
+              50: '#F8F9FB',
+              900: '#1A2235',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+          },
+          maxWidth: {
+            '8xl': '88rem',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F8F9FB;
+      color: #1A2235;
+    }
+    .heading { font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    .gradient-hero {
+      background: radial-gradient(ellipse at top, rgba(11, 95, 217, 0.08), transparent 60%),
+                  linear-gradient(180deg, #FFFFFF 0%, #F8F9FB 100%);
+    }
+    .dot-accent { display: inline-block; width: 0.4em; height: 0.4em; border-radius: 9999px; background: #0B5FD9; vertical-align: 0.45em; margin: 0 0.05em; }
+    .card-hover { transition: transform 200ms ease, box-shadow 200ms ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(11, 95, 217, 0.10); }
+    .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; line-height: 1.6; }
+    .scroll-mt { scroll-margin-top: 80px; }
+    @media (prefers-reduced-motion: reduce) {
+      .card-hover, .card-hover:hover { transition: none; transform: none; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav class="max-w-8xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 heading text-xl">
+        <span class="w-7 h-7 rounded-lg bg-brand-500 grid place-items-center text-white text-sm font-bold">c</span>
+        Cadence
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm text-slate-700">
+        <a href="#features" class="hover:text-brand-500">Features</a>
+        <a href="#how" class="hover:text-brand-500">How it works</a>
+        <a href="#pricing" class="hover:text-brand-500">Pricing</a>
+        <a href="#api" class="hover:text-brand-500">API</a>
+        <a href="#faq" class="hover:text-brand-500">FAQ</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="hidden sm:inline-block text-sm text-slate-700 hover:text-brand-500">Sign in</a>
+        <a href="#" class="text-sm bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get started</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="gradient-hero">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8 pt-16 lg:pt-24 pb-20 lg:pb-32 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-medium mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-mint animate-pulse"></span>
+        Now in private beta — GHL + Dynamics 365 native
+      </div>
+      <h1 class="heading text-5xl md:text-7xl text-slate-900 mb-6 leading-[1.05]">
+        Your CRM<span class="dot-accent"></span> now with a voice.
+      </h1>
+      <p class="text-lg md:text-xl text-slate-700 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Cadence turns contacts into conversations. Programmable. Multi-CRM. Developer-first. Built for teams that want to put a voice companion in front of their users without rebuilding Twilio from scratch.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <a href="#" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">Get started free</a>
+        <a href="#api" class="w-full sm:w-auto border border-slate-300 hover:border-brand-500 text-slate-900 hover:text-brand-500 px-6 py-3 rounded-lg font-medium transition-colors">Read the API docs</a>
+      </div>
+      <div class="mt-16 max-w-5xl mx-auto">
+        <div class="bg-slate-900 rounded-2xl shadow-2xl shadow-brand-500/10 p-6 md:p-8 text-left">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            </div>
+            <span class="text-xs text-slate-400 ml-2 font-mono">terminal</span>
+          </div>
+          <pre class="code-block text-slate-100 overflow-x-auto"><code><span class="text-slate-500"># Install the Cadence SDK</span>
+<span class="text-mint">$</span> npm install @cadence/sdk
+
+<span class="text-slate-500"># Create a companion and start a call</span>
+<span class="text-purple-300">import</span> { <span class="text-yellow-300">Cadence</span> } <span class="text-purple-300">from</span> <span class="text-green-300">'@cadence/sdk'</span>;
+
+<span class="text-purple-300">const</span> cadence = <span class="text-purple-300">new</span> <span class="text-yellow-300">Cadence</span>({ apiKey: process.env.<span class="text-yellow-300">CADENCE_KEY</span> });
+
+<span class="text-purple-300">const</span> call = <span class="text-purple-300">await</span> cadence.calls.<span class="text-yellow-300">start</span>({
+  companion: <span class="text-green-300">'friendly-checkin'</span>,
+  contact: { source: <span class="text-green-300">'ghl'</span>, id: <span class="text-green-300">'ct_8x29'</span> },
+  goal: <span class="text-green-300">'weekly_checkin'</span>,
+});
+
+console.<span class="text-yellow-300">log</span>(call.transcript_url);</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social proof -->
+  <section class="bg-white border-y border-slate-200 py-12">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8 text-center">
+      <p class="text-sm text-slate-500 uppercase tracking-wider font-medium mb-6">Built with patterns from</p>
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60">
+        <span class="heading text-2xl">⌘ Command</span>
+        <span class="heading text-2xl">◆ Vertex</span>
+        <span class="heading text-2xl">▲ Northwind</span>
+        <span class="heading text-2xl">⬢ Hexagon</span>
+        <span class="heading text-2xl">◯ Loop</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-4 italic">(Names shown for layout — replace with real customers once shipped)</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 lg:py-28 scroll-mt">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="heading text-4xl md:text-5xl text-slate-900 mb-4">What you get out of the box</h2>
+        <p class="text-lg text-slate-700">The plumbing is the hard part. We did it. You write the voice.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8 card-hover">
+          <div class="w-12 h-12 rounded-xl bg-brand-50 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Two-CRM sync</h3>
+          <p class="text-slate-700">Native connectors for GoHighLevel and Microsoft Dynamics 365. Push contacts, pull transcripts, sync call outcomes. Both ways.</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8 card-hover">
+          <div class="w-12 h-12 rounded-xl bg-mint/30 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Programmable API</h3>
+          <p class="text-slate-700">REST + WebSocket. Start a call from any event. Pull transcripts in JSON. Webhooks for every state change. SDKs for Python, Node, Go.</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8 card-hover">
+          <div class="w-12 h-12 rounded-xl bg-brand-50 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Compliance baked in</h3>
+          <p class="text-slate-700">SOC 2 Type II, HIPAA-ready, GDPR-aligned data handling. Per-tenant encryption. Audit logs on every API call. No surprises.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="py-20 lg:py-28 bg-white border-y border-slate-200 scroll-mt">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="heading text-4xl md:text-5xl text-slate-900 mb-4">Three steps to a voice companion</h2>
+        <p class="text-lg text-slate-700">No call center integration. No vendor lock-in. Just code.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full bg-brand-500 text-white grid place-items-center text-2xl font-bold mx-auto mb-4">1</div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Connect your CRM</h3>
+          <p class="text-slate-700">OAuth into GHL or Dynamics 365. Pick which contacts, pipelines, and triggers you want synced. Takes 90 seconds.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full bg-brand-500 text-white grid place-items-center text-2xl font-bold mx-auto mb-4">2</div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Define the companion</h3>
+          <p class="text-slate-700">Pick a voice. Write a system prompt. Set the goal — check-in, qualification, follow-up. Test in browser before deploying.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full bg-brand-500 text-white grid place-items-center text-2xl font-bold mx-auto mb-4">3</div>
+          <h3 class="heading text-xl text-slate-900 mb-2">Call from any event</h3>
+          <p class="text-slate-700">Trigger from a CRM event, an API call, a webhook, or a schedule. Cadence handles the call, the transcript, the sync back.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-20 lg:py-28 scroll-mt">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="heading text-4xl md:text-5xl text-slate-900 mb-4">Pricing that scales with you</h2>
+        <p class="text-lg text-slate-700">Start free. Pay only when you ship.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8">
+          <h3 class="heading text-2xl text-slate-900 mb-2">Free</h3>
+          <div class="mb-4">
+            <span class="text-5xl font-bold text-slate-900">$0</span>
+            <span class="text-slate-600">/mo</span>
+          </div>
+          <p class="text-slate-700 mb-6">For prototypes and side projects.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-8">
+            <li class="flex gap-2"><span class="text-mint">✓</span> 100 minutes / month</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> 1 CRM connection</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> 1 companion</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Community support</li>
+          </ul>
+          <a href="#" class="block text-center w-full border border-slate-300 hover:border-brand-500 text-slate-900 hover:text-brand-500 px-4 py-2.5 rounded-lg font-medium transition-colors">Start free</a>
+        </div>
+        <div class="bg-slate-900 text-white rounded-2xl p-6 lg:p-8 ring-2 ring-brand-500 relative">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-white text-xs px-3 py-1 rounded-full font-medium">Most popular</div>
+          <h3 class="heading text-2xl mb-2">Pro</h3>
+          <div class="mb-4">
+            <span class="text-5xl font-bold">$49</span>
+            <span class="text-slate-300">/mo</span>
+          </div>
+          <p class="text-slate-300 mb-6">For teams shipping production voice.</p>
+          <ul class="space-y-2 text-sm text-slate-200 mb-8">
+            <li class="flex gap-2"><span class="text-mint">✓</span> 1,000 minutes / month</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> 5 CRM connections</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Unlimited companions</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Webhooks + transcripts</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Email support (24h)</li>
+          </ul>
+          <a href="#" class="block text-center w-full bg-brand-500 hover:bg-brand-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">Start Pro trial</a>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8">
+          <h3 class="heading text-2xl text-slate-900 mb-2">Enterprise</h3>
+          <div class="mb-4">
+            <span class="text-5xl font-bold text-slate-900">Custom</span>
+          </div>
+          <p class="text-slate-700 mb-6">For contact centers + regulated industries.</p>
+          <ul class="space-y-2 text-sm text-slate-700 mb-8">
+            <li class="flex gap-2"><span class="text-mint">✓</span> Unlimited minutes</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Unlimited CRM connections</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> SSO + audit logs</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Custom voice model</li>
+            <li class="flex gap-2"><span class="text-mint">✓</span> Dedicated CSM</li>
+          </ul>
+          <a href="#" class="block text-center w-full border border-slate-300 hover:border-brand-500 text-slate-900 hover:text-brand-500 px-4 py-2.5 rounded-lg font-medium transition-colors">Talk to sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section class="py-20 lg:py-28 bg-white border-y border-slate-200">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="heading text-4xl md:text-5xl text-slate-900 mb-4">Built for real workflows</h2>
+        <p class="text-lg text-slate-700">No clinical positioning. No caregiver copy. Just the calls teams actually need.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-slate-50 rounded-2xl p-6">
+          <h3 class="heading text-lg text-slate-900 mb-2">Customer follow-up</h3>
+          <p class="text-sm text-slate-700">"Just checking in" calls after purchase, renewal, or onboarding. Logs back to CRM as a note.</p>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-6">
+          <h3 class="heading text-lg text-slate-900 mb-2">Lead qualification</h3>
+          <p class="text-sm text-slate-700">First-touch call to qualify inbound leads. Books meetings on the calendar. Syncs to GHL pipeline.</p>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-6">
+          <h3 class="heading text-lg text-slate-900 mb-2">Daily check-ins</h3>
+          <p class="text-sm text-slate-700">Brief wellness or accountability check-ins. Non-clinical. Friendly. Short.</p>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-6">
+          <h3 class="heading text-lg text-slate-900 mb-2">Language practice</h3>
+          <p class="text-sm text-slate-700">Conversation practice for learners. Tracks vocabulary in contact notes. Bilingual voices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API -->
+  <section id="api" class="py-20 lg:py-28 scroll-mt">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="heading text-4xl md:text-5xl text-slate-900 mb-6">Three lines to your first call</h2>
+          <p class="text-lg text-slate-700 mb-6">No SDK lock-in. Plain HTTP. Webhooks for state. WebSocket for live audio if you need it.</p>
+          <ul class="space-y-3 text-slate-700">
+            <li class="flex gap-3"><span class="text-brand-500 font-bold">▸</span> REST API + JSON for everything</li>
+            <li class="flex gap-3"><span class="text-brand-500 font-bold">▸</span> Webhooks on every call state change</li>
+            <li class="flex gap-3"><span class="text-brand-500 font-bold">▸</span> Server-Sent Events for transcripts</li>
+            <li class="flex gap-3"><span class="text-brand-500 font-bold">▸</span> TypeScript + Python + Go SDKs</li>
+            <li class="flex gap-3"><span class="text-brand-500 font-bold">▸</span> OpenAPI spec, fully versioned</li>
+          </ul>
+          <a href="#" class="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium mt-6">
+            Read the full reference
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <div class="bg-slate-900 rounded-2xl shadow-xl p-6 text-left">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            </div>
+            <span class="text-xs text-slate-400 ml-2 font-mono">POST /v1/calls</span>
+          </div>
+          <pre class="code-block text-slate-100 overflow-x-auto leading-relaxed"><code><span class="text-purple-300">curl</span> -X POST https://api.cadence.io/v1/calls \
+  -H <span class="text-green-300">"Authorization: Bearer $CADENCE_KEY"</span> \
+  -H <span class="text-green-300">"Content-Type: application/json"</span> \
+  -d <span class="text-green-300">'{
+    "companion": "friendly-checkin",
+    "contact": {
+      "source": "ghl",
+      "id": "ct_8x29"
+    },
+    "goal": "weekly_checkin",
+    "voice": "en-US-journal"
+  }'</span>
+
+<span class="text-slate-500">// → 200 OK</span>
+{
+  <span class="text-yellow-300">"id"</span>: <span class="text-green-300">"call_4yZk..."</span>,
+  <span class="text-yellow-300">"status"</span>: <span class="text-green-300">"queued"</span>,
+  <span class="text-yellow-300">"contact_id"</span>: <span class="text-green-300">"ct_8x29"</span>,
+  <span class="text-yellow-300">"webhook_url"</span>: <span class="text-green-300">"https://..."</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 lg:py-28 bg-white border-t border-slate-200 scroll-mt">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <h2 class="heading text-4xl md:text-5xl text-slate-900 text-center mb-16">Frequently asked, plainly answered</h2>
+      <div class="space-y-4">
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">Is Cadence the same as Twilio or Vapi?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">No. Twilio gives you telephony. Vapi gives you a managed voice model. Cadence sits on top and gives you CRM-native voice companions — sync contacts into the call, sync outcomes back to the CRM.</p>
+        </details>
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">Which CRMs are supported?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">GoHighLevel and Microsoft Dynamics 365 at launch. HubSpot + Pipedrive + Salesforce on the roadmap. The integration layer is pluggable — adding a new CRM is a 1–2 week build.</p>
+        </details>
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">Do you make clinical claims?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">No. Cadence is a programmable voice companion platform for general use — customer outreach, follow-ups, lead qualification, language practice. Not for clinical, treatment, or caregiver use cases.</p>
+        </details>
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">How long does setup take?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">Free tier: 10 minutes. Pro: a few hours including OAuth flow and CRM mapping. Enterprise: depends on data residency + SSO + audit requirements.</p>
+        </details>
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">What's the data residency story?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">US data in us-east-1 by default. EU + AU regions available on Enterprise. Audio is encrypted at rest. Transcripts can be set to ephemeral.</p>
+        </details>
+        <details class="bg-slate-50 rounded-xl p-6 group">
+          <summary class="flex justify-between items-center cursor-pointer list-none">
+            <span class="heading text-lg text-slate-900">Can I cancel anytime?</span>
+            <svg class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="text-slate-700 mt-4">Yes. No annual contracts on Free or Pro. Enterprise contracts are negotiable.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 lg:py-28 bg-gradient-to-br from-brand-500 to-brand-700">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center text-white">
+      <h2 class="heading text-4xl md:text-5xl mb-6">Ship a voice before lunch.</h2>
+      <p class="text-lg md:text-xl text-brand-100 mb-10">Free tier. No credit card. Two minutes to your first companion.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="#" class="w-full sm:w-auto bg-white text-brand-600 hover:bg-slate-50 px-6 py-3 rounded-lg font-medium transition-colors">Get started free</a>
+        <a href="#" class="w-full sm:w-auto border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg font-medium transition-colors">Book a demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-12">
+    <div class="max-w-8xl mx-auto px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-2 heading text-xl text-white mb-4">
+            <span class="w-7 h-7 rounded-lg bg-brand-500 grid place-items-center text-white text-sm font-bold">c</span>
+            Cadence
+          </div>
+          <p class="text-sm">Voice companions for the multi-CRM era.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-medium mb-3">Product</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white">Features</a></li>
+            <li><a href="#" class="hover:text-white">Pricing</a></li>
+            <li><a href="#" class="hover:text-white">API reference</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-medium mb-3">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white">About</a></li>
+            <li><a href="#" class="hover:text-white">Customers</a></li>
+            <li><a href="#" class="hover:text-white">Careers</a></li>
+            <li><a href="#" class="hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-medium mb-3">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white">Terms</a></li>
+            <li><a href="#" class="hover:text-white">Privacy</a></li>
+            <li><a href="#" class="hover:text-white">Security</a></li>
+            <li><a href="#" class="hover:text-white">DPA</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+        <p>© 2026 Cadence. An AutonoLabs project.</p>
+        <p>Built by humans. Shipped with care.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
